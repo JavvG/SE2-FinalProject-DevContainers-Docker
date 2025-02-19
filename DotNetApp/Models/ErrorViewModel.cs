@@ -1,4 +1,4 @@
-namespace DotNetApp.Models;
+namespace tl2_tp10_2023_JavvG.Models;
 
 public class ErrorViewModel
 {

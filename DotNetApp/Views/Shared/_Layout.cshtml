@@ -1,32 +1,55 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+}
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DotNetApp</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/DotNetApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TaskManagerApp.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DotNetApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm fixed-top">
+            <div class="container-fluid justify-content-between">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" data-text>
+                    <img src="~/images/logo.png" alt="Logo Sample" class="img-fluid rounded-circle" style="max-height: 40px;">  Simple Task Manager
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-sm-inline-flex">
+                    <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link nav-button" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i>Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link nav-button" asp-area="" asp-controller="Usuario" asp-action="Index"><i class="bi bi-people"></i>Usuarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-button" asp-area="" asp-controller="Tablero" asp-action="Index"><i class="bi bi-columns-gap"></i>Tableros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-button" asp-area="" asp-controller="Tarea" asp-action="Index"><i class="bi bi-check2-square"></i>Tareas</a>
                         </li>
                     </ul>
                 </div>
+                @if(session.GetString("rol") != "administrador" && session.GetString("rol") != "operador")
+                {   
+                    <a class="nav-link login-button" asp-area="" asp-controller="Login" asp-action="Index"><i class="bi bi-box-arrow-in-right"></i>Iniciar sesión</a>
+                }
+                else
+                {
+                    <a class="nav-link logout-button" asp-area="" asp-controller="Login" asp-action="Logout"><i class="bi bi-box-arrow-right"></i>Cerrar sesión</a>
+                }
             </div>
         </nav>
     </header>
@@ -36,14 +59,22 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer>
         <div class="container">
-            &copy; 2025 - DotNetApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - Simple Task Manager - 𝙷✺𝚃𝚈.𝙳𝙴𝚅<a asp-area="" asp-controller="Home" asp-action="Privacy"></a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <button class="navigation-btn" onclick="goBack()"><i class="bi bi-arrow-left"></i></button>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        };
+    </script>
 </body>
 </html>

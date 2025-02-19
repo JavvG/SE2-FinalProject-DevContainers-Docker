@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using DotNetApp.Models;
+using tl2_tp10_2023_JavvG.Models;
 
-namespace DotNetApp.Controllers;
+namespace tl2_tp10_2023_JavvG.Controllers;
 
 public class HomeController : Controller
 {
@@ -15,7 +15,26 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        try
+        {
+            // Se verifica que el usuario esté logueado correctamente
+
+            if(HttpContext.Session.GetString("rol") != "administrador" && HttpContext.Session.GetString("rol") != "operador") 
+            {
+                TempData["ErrorMessage"] = "Inicie sesión antes de acceder a este sitio";
+                return RedirectToRoute(new { controller = "Login", action = "Index" });
+            }
+            else
+            {
+                if(HttpContext.Session.GetString("rol") == "administrador") return View("IndexAdministratorUser");
+                return View("IndexOperatorUser");
+            }
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            return BadRequest();
+        }
     }
 
     public IActionResult Privacy()
